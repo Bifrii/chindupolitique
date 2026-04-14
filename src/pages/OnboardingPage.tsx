@@ -48,6 +48,8 @@ const STEP_LABELS = ["Identité", "Géographie", "Objectifs", "Réseaux"];
 export default function OnboardingPage() {
   const [step, setStep] = useState(1);
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => { trackOnboardingStarted(); }, []);
   const { user, profile, refreshProfile } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
