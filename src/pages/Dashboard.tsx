@@ -43,7 +43,7 @@ function HeroLanding() {
         transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
         className="hero-headline"
       >
-        Contrôlez le récit.
+        Contrôlez le récit politique.
       </motion.h1>
       <motion.p
         initial={{ opacity: 0, y: 16 }}
