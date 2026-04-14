@@ -13,6 +13,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { saveArchive } from "@/lib/archiveService";
 import { useGuestUsage } from "@/hooks/useGuestUsage";
 import { PremiumLoginModal } from "@/components/PremiumLoginModal";
+import { trackFeatureUsed, trackApiError } from "@/lib/operationalTracking";
 
 const tabs = [
   { value: "crise", label: "Crise", fullLabel: "Gérer une crise", icon: Flame },
@@ -56,12 +57,13 @@ export default function ContentGenerator() {
     if (!checkAndIncrement()) return;
     setLoading(true);
     setResult(null);
+    trackFeatureUsed(`generate_content_${tab}`);
     try {
       const { data, error } = await supabase.functions.invoke("generate-content", {
         body: { tab, input, userProfile: profile },
       });
-      if (error) throw error;
-      if (data.error) throw new Error(data.error);
+      if (error) { trackApiError("generate-content", 500); throw error; }
+      if (data.error) { trackApiError("generate-content"); throw new Error(data.error); }
       setResult(data);
       const tabLabels: Record<string, string> = { crise: "Plan de crise", image: "Campagne d'image", attaque: "Réponse à attaque", viral: "Message viral" };
       saveArchive({

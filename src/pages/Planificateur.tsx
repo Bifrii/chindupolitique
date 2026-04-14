@@ -18,6 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { trackFeatureUsed } from "@/lib/operationalTracking";
 
 interface Post {
   id: string;
@@ -151,6 +152,7 @@ export default function Planificateur() {
       toast({ title: "Erreur", description: "Remplissez tous les champs obligatoires.", variant: "destructive" }); return;
     }
     setSaving(true);
+    trackFeatureUsed("planificateur_save");
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) { setSaving(false); return; }
     const scheduledAt = new Date(`${scheduledDate}T${scheduledTime}:00`).toISOString();

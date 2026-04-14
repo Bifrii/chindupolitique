@@ -16,6 +16,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { trackFeatureUsed, trackApiError } from "@/lib/operationalTracking";
 
 interface Trend {
   rank: number;
@@ -204,10 +205,11 @@ export default function VeilleTwitter() {
     setLoadingTrends(true);
     setFetchError(null);
     if (!isAuto) setCooldown(COOLDOWN_SECONDS);
+    trackFeatureUsed("veille_twitter");
     try {
       const { data, error } = await supabase.functions.invoke("veille-trends");
-      if (error) throw error;
-      if (data.error) throw new Error(data.error);
+      if (error) { trackApiError("veille-trends", 500); throw error; }
+      if (data.error) { trackApiError("veille-trends"); throw new Error(data.error); }
       const result: VeilleData = {
         trends: data.trends || [], analyse_globale: data.analyse_globale || "",
         niveau_tension_national: data.niveau_tension_national || 0, timestamp: data.timestamp || new Date().toISOString(),

@@ -12,6 +12,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { trackFeatureUsed, trackVisit } from "@/lib/operationalTracking";
 
 interface DashboardData {
   tension: { score: number; label: string; explanation: string; trend: string };
@@ -132,6 +133,7 @@ function AuthenticatedDashboard() {
   const fetchDashboard = async () => {
     if (!user || !hasProfile) return;
     setLoading(true);
+    trackVisit();
     try {
       const { data, error } = await supabase.functions.invoke("dashboard-ai", {
         body: { political_role: profile.political_role, region: profile.region, full_name: profile.full_name },

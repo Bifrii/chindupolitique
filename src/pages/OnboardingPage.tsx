@@ -11,6 +11,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { trackOnboardingStarted, trackOnboardingCompleted } from "@/lib/operationalTracking";
 import logo from "@/assets/logo.png";
 
 const DRC_PROVINCES = [
@@ -66,6 +67,7 @@ export default function OnboardingPage() {
   const handleFinish = async () => {
     if (!user) return;
     setSaving(true);
+    trackOnboardingCompleted();
     const politicalRole = role === "autre" ? customRole : role;
 
     const { error } = await (supabase as any)
