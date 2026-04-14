@@ -22,6 +22,7 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import OnboardingPage from "./pages/OnboardingPage";
 import AuthCallback from "./pages/AuthCallback";
 import NotFound from "./pages/NotFound";
+import AdminDashboard from "./pages/AdminDashboard";
 
 const queryClient = new QueryClient();
 
@@ -130,6 +131,14 @@ const App = () => (
                       element={
                         <RequireAuth>
                           <ProfilePage />
+                        </RequireAuth>
+                      }
+                    />
+                    <Route
+                      path="/admin"
+                      element={
+                        <RequireAuth>
+                          <AdminDashboard />
                         </RequireAuth>
                       }
                     />

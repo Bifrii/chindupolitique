@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { trackLoginFailed, trackSignupFailed, trackSignupSuccess, trackVisit } from "@/lib/operationalTracking";
 
 export interface Profile {
   id: string;
@@ -90,11 +91,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         emailRedirectTo: window.location.origin,
       },
     });
+    if (error) {
+      trackSignupFailed(error.message);
+    } else {
+      trackSignupSuccess();
+    }
     return { error };
   };
 
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) trackLoginFailed(error.message);
+    else trackVisit();
     return { error };
   };
 
