@@ -103,6 +103,24 @@ export function AppSidebar() {
       <SidebarFooter className="px-2 pb-4">
         <div className="system-line mb-3" />
         <SidebarMenu>
+          {isAdmin && (
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                asChild
+                isActive={isActive("/admin")}
+                tooltip="Supervision"
+              >
+                <NavLink
+                  to="/admin"
+                  className="hover:bg-accent/60 transition-colors text-sidebar-foreground"
+                  activeClassName="bg-accent text-foreground"
+                >
+                  <Shield className="h-4 w-4 shrink-0" />
+                  {!collapsed && <span className="text-[13px]">Supervision</span>}
+                </NavLink>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
           {bottomItems.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton
