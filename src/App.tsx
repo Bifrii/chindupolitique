@@ -134,6 +134,14 @@ const App = () => (
                         </RequireAuth>
                       }
                     />
+                    <Route
+                      path="/admin"
+                      element={
+                        <RequireAuth>
+                          <AdminDashboard />
+                        </RequireAuth>
+                      }
+                    />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </AppLayout>
