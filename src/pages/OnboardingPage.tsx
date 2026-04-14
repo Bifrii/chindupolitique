@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, ChevronLeft, Loader2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { trackOnboardingStarted, trackOnboardingCompleted } from "@/lib/operationalTracking";
 import logo from "@/assets/logo.png";
 
 const DRC_PROVINCES = [
@@ -47,6 +48,8 @@ const STEP_LABELS = ["Identité", "Géographie", "Objectifs", "Réseaux"];
 export default function OnboardingPage() {
   const [step, setStep] = useState(1);
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => { trackOnboardingStarted(); }, []);
   const { user, profile, refreshProfile } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -66,6 +69,7 @@ export default function OnboardingPage() {
   const handleFinish = async () => {
     if (!user) return;
     setSaving(true);
+    trackOnboardingCompleted();
     const politicalRole = role === "autre" ? customRole : role;
 
     const { error } = await (supabase as any)

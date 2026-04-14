@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { saveArchive } from "@/lib/archiveService";
 import { useGuestUsage } from "@/hooks/useGuestUsage";
 import { PremiumLoginModal } from "@/components/PremiumLoginModal";
+import { trackFeatureUsed } from "@/lib/operationalTracking";
 
 type Message = { role: "user" | "assistant"; content: string };
 
@@ -131,6 +132,7 @@ export default function AIStrategist() {
     setMessages(allMessages);
     setInput("");
     setIsLoading(true);
+    trackFeatureUsed("ai_strategist");
     let assistantSoFar = "";
     const upsertAssistant = (chunk: string) => {
       assistantSoFar += chunk;

@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import DRCMap from "@/components/DRCMap";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { trackFeatureUsed, trackApiError } from "@/lib/operationalTracking";
 
 interface ProvinceData {
   name: string;
@@ -135,10 +136,11 @@ export default function PoliticalRadar() {
 
   const handleRefresh = async () => {
     setLoading(true);
+    trackFeatureUsed("political_radar");
     try {
       const { data, error } = await supabase.functions.invoke("political-radar");
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
+      if (error) { trackApiError("political-radar", 500); throw error; }
+      if (data?.error) { trackApiError("political-radar"); throw new Error(data.error); }
       setRadarData(data);
       toast({ title: "Radar mis à jour", description: "Données de tension actualisées par l'IA." });
     } catch (e: any) {

@@ -10,6 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { saveArchive } from "@/lib/archiveService";
 import { useGuestUsage } from "@/hooks/useGuestUsage";
 import { PremiumLoginModal } from "@/components/PremiumLoginModal";
+import { trackFeatureUsed, trackApiError } from "@/lib/operationalTracking";
 
 const relations = [
   { value: "rival", label: "Rival", color: "bg-destructive/60" },
@@ -55,12 +56,13 @@ export default function AnalyzeContent() {
     if (!checkAndIncrement()) return;
     setLoading(true);
     setAnalysis(null);
+    trackFeatureUsed("analyze_content");
     try {
       const { data, error } = await supabase.functions.invoke("analyze-content", {
         body: { content, relation, userProfile: profile },
       });
-      if (error) throw error;
-      if (data.error) throw new Error(data.error);
+      if (error) { trackApiError("analyze-content", 500); throw error; }
+      if (data.error) { trackApiError("analyze-content"); throw new Error(data.error); }
       setAnalysis(data);
       saveArchive({
         type: "analyse",
