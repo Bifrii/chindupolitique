@@ -74,6 +74,156 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_feedback: {
+        Row: {
+          category: string
+          created_at: string | null
+          date: string
+          id: string
+          message: string
+          priority: string | null
+          user_type: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          date?: string
+          id?: string
+          message: string
+          priority?: string | null
+          user_type?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          date?: string
+          id?: string
+          message?: string
+          priority?: string | null
+          user_type?: string | null
+        }
+        Relationships: []
+      }
+      daily_incidents: {
+        Row: {
+          created_at: string | null
+          date: string
+          id: string
+          incident_type: string
+          message: string
+          page_or_module: string | null
+          resolved: boolean | null
+          severity: string
+        }
+        Insert: {
+          created_at?: string | null
+          date?: string
+          id?: string
+          incident_type: string
+          message: string
+          page_or_module?: string | null
+          resolved?: boolean | null
+          severity?: string
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          id?: string
+          incident_type?: string
+          message?: string
+          page_or_module?: string | null
+          resolved?: boolean | null
+          severity?: string
+        }
+        Relationships: []
+      }
+      daily_metrics: {
+        Row: {
+          active_users: number | null
+          conversion_rate: number | null
+          created_at: string | null
+          date: string
+          id: string
+          landing_page_top: string | null
+          notes: string | null
+          signups: number | null
+          traffic_source_top: string | null
+          visits: number | null
+        }
+        Insert: {
+          active_users?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          date?: string
+          id?: string
+          landing_page_top?: string | null
+          notes?: string | null
+          signups?: number | null
+          traffic_source_top?: string | null
+          visits?: number | null
+        }
+        Update: {
+          active_users?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          date?: string
+          id?: string
+          landing_page_top?: string | null
+          notes?: string | null
+          signups?: number | null
+          traffic_source_top?: string | null
+          visits?: number | null
+        }
+        Relationships: []
+      }
+      daily_operations_summary: {
+        Row: {
+          conversion_rate: number | null
+          created_at: string | null
+          date: string
+          growth_status: string | null
+          id: string
+          key_incidents: Json | null
+          main_opportunities: string[] | null
+          main_risks: string[] | null
+          recommended_actions: string[] | null
+          technical_status: string | null
+          top_feedback: Json | null
+          total_signups: number | null
+          total_visits: number | null
+        }
+        Insert: {
+          conversion_rate?: number | null
+          created_at?: string | null
+          date?: string
+          growth_status?: string | null
+          id?: string
+          key_incidents?: Json | null
+          main_opportunities?: string[] | null
+          main_risks?: string[] | null
+          recommended_actions?: string[] | null
+          technical_status?: string | null
+          top_feedback?: Json | null
+          total_signups?: number | null
+          total_visits?: number | null
+        }
+        Update: {
+          conversion_rate?: number | null
+          created_at?: string | null
+          date?: string
+          growth_status?: string | null
+          id?: string
+          key_incidents?: Json | null
+          main_opportunities?: string[] | null
+          main_risks?: string[] | null
+          recommended_actions?: string[] | null
+          technical_status?: string | null
+          top_feedback?: Json | null
+          total_signups?: number | null
+          total_visits?: number | null
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           created_at: string | null
@@ -104,6 +254,36 @@ export type Database = {
           title?: string
           type?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      operational_events: {
+        Row: {
+          created_at: string | null
+          event_category: string
+          event_type: string
+          id: string
+          metadata: Json | null
+          page_or_module: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_category: string
+          event_type: string
+          id?: string
+          metadata?: Json | null
+          page_or_module?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_category?: string
+          event_type?: string
+          id?: string
+          metadata?: Json | null
+          page_or_module?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -293,6 +473,24 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       veille_alertes: {
         Row: {
           created_at: string | null
@@ -388,10 +586,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -518,6 +722,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+    },
   },
 } as const
