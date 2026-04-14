@@ -91,11 +91,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         emailRedirectTo: window.location.origin,
       },
     });
+    if (error) {
+      trackSignupFailed(error.message);
+    } else {
+      trackSignupSuccess();
+    }
     return { error };
   };
 
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) trackLoginFailed(error.message);
+    else trackVisit();
     return { error };
   };
 
