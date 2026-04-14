@@ -1,6 +1,9 @@
-import { Home, Swords, Map, Bot, Megaphone, Radio, CalendarDays, FolderArchive, Settings } from "lucide-react";
+import { Home, Swords, Map, Bot, Megaphone, Radio, CalendarDays, FolderArchive, Settings, Shield } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/logo.png";
 import {
   Sidebar,
