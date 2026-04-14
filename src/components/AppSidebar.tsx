@@ -1,6 +1,9 @@
-import { Home, Swords, Map, Bot, Megaphone, Radio, CalendarDays, FolderArchive, Settings } from "lucide-react";
+import { Home, Swords, Map, Bot, Megaphone, Radio, CalendarDays, FolderArchive, Settings, Shield } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/logo.png";
 import {
   Sidebar,
@@ -34,6 +37,19 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
+  const { user } = useAuth();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    (supabase as any)
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id)
+      .eq("role", "admin")
+      .maybeSingle()
+      .then(({ data }: any) => setIsAdmin(!!data));
+  }, [user]);
 
   const isActive = (path: string) =>
     path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
@@ -87,6 +103,24 @@ export function AppSidebar() {
       <SidebarFooter className="px-2 pb-4">
         <div className="system-line mb-3" />
         <SidebarMenu>
+          {isAdmin && (
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                asChild
+                isActive={isActive("/admin")}
+                tooltip="Supervision"
+              >
+                <NavLink
+                  to="/admin"
+                  className="hover:bg-accent/60 transition-colors text-sidebar-foreground"
+                  activeClassName="bg-accent text-foreground"
+                >
+                  <Shield className="h-4 w-4 shrink-0" />
+                  {!collapsed && <span className="text-[13px]">Supervision</span>}
+                </NavLink>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
           {bottomItems.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton
