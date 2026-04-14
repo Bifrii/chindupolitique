@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { trackLoginFailed, trackSignupFailed, trackSignupSuccess, trackVisit } from "@/lib/operationalTracking";
 
 export interface Profile {
   id: string;
