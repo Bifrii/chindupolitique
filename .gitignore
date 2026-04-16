@@ -24,3 +24,8 @@ dist-ssr
 *.sw?
 .env
 .env.*
+main_agent.md
+orchestrator_agent.md
+strategist_agent.md
+strategist_agent.md
+PROJECT.md
