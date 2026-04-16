@@ -42,3 +42,15 @@
 1. @analyst reads supabase/ folder first
 2. @dev creates migration file in supabase/migrations/
 3. @reporter documents the schema change
+
+## Database - Lovable Cloud / Supabase
+- Provider: Lovable Cloud (uses Supabase under the hood)
+- Project URL: https://otktarqhxbdgvmvwyrxz.supabase.co
+- Supabase folder: /supabase (migrations, edge functions)
+- NEVER commit .env or any key to GitHub
+- To query the DB from agents: use Supabase REST API with service role key from env
+- Edge functions are in supabase/functions/ if they exist
+
+## Environment variables needed
+- VITE_SUPABASE_URL
+- SUPABASE_SERVICE_ROLE_KEY
