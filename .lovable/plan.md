@@ -1,27 +1,35 @@
 
 
-## Problème
+## Plan : Edge Function temporaire pour récupérer la Service Role Key
 
-Deux sujets à traiter :
+### Objectif
+Créer une edge function `get-service-key` qui retourne la `SUPABASE_SERVICE_ROLE_KEY` une seule fois, protégée par le header `x-api-key`, puis la supprimer immédiatement après usage.
 
-1. **Erreur de build** : `Index.tsx` importe `Testimonials` depuis `./Testimonials` (même dossier `pages/`), mais le fichier est dans `src/components/Testimonials.tsx`. L'import doit être corrigé.
+### Avertissement sécurité
+La Service Role Key donne un accès complet à votre base de données en contournant toutes les règles RLS. Ne la partagez jamais publiquement. Utilisez-la uniquement dans un environnement serveur sécurisé (ex: OpenClaw).
 
-2. **Service Role Key introuvable** : Cette clé est un secret interne au backend Lovable Cloud. Elle est automatiquement disponible dans les Edge Functions via `Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")` — vous n'avez pas besoin de la trouver manuellement. Votre endpoint `daily-operations-summary` l'utilise déjà correctement.
+### Étapes
 
-## Plan
+**1. Créer `supabase/functions/get-service-key/index.ts`**
+- Vérifie le header `x-api-key` contre `OPERATIONS_API_KEY`
+- Retourne `SUPABASE_SERVICE_ROLE_KEY` en JSON
+- Réponse unique — la fonction sera supprimée juste après
 
-### Étape 1 — Corriger l'erreur de build
+**2. Déployer et tester**
+- Déployer la fonction
+- Tester avec curl pour confirmer qu'elle retourne la clé
 
-Modifier `src/pages/Index.tsx` ligne 1 :
-- Changer `import Testimonials from "./Testimonials"` en `import Testimonials from "@/components/Testimonials"`
+**3. Supprimer la fonction**
+- Supprimer le code et la fonction déployée immédiatement après récupération de la clé
 
-### Étape 2 — Accès à la Service Role Key
-
-Aucune action code nécessaire. Pour donner accès à un agent externe (OpenClaw), il suffit d'utiliser la clé API `OPERATIONS_API_KEY` que vous avez déjà configurée. L'endpoint est :
-
+### Appel attendu
 ```
-curl -H "x-api-key: VOTRE_CLE" https://otktarqhxbdgvmvwyrxz.supabase.co/functions/v1/daily-operations-summary
+curl -H "x-api-key: VOTRE_CLE" \
+  https://otktarqhxbdgvmvwyrxz.supabase.co/functions/v1/get-service-key
 ```
 
-La Service Role Key reste un secret interne — elle n'a pas besoin d'être exposée.
+### Résultat
+```json
+{ "service_role_key": "eyJ..." }
+```
 
