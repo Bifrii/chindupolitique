@@ -25,6 +25,12 @@ export default function Index() {
 
       {/* Section Témoignages */}
       <Testimonials />
+        <a href="/faq" className="mt-4 inline-block bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">Questions Fréquemment Posées</a>
+        <a href="/blog" className="mt-4 inline-block bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">Voir notre blog</a>
+        <a href="/faq" className="mt-4 inline-block bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">Questions Fréquemment Posées</a>
+        <a href="/blog" className="mt-4 inline-block bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">Voir notre blog</a>
+        <a href="/pricing" className="mt-4 inline-block bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">Voir nos tarifs</a>
+        <a href="/pricing" className="mt-4 inline-block bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">Voir nos tarifs</a>
 
       {/* Section CTA final */}
       <div className="mt-10 w-full max-w-3xl p-4 bg-white rounded-lg shadow-md">
