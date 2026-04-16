@@ -1,4 +1,4 @@
-import Testimonials from "./Testimonials";
+import Testimonials from "@/components/Testimonials";
 import LoginPage from "./LoginPage";
 
 export default function Index() {
